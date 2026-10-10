@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Atualização Cadastral - Secagem</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f1f5f9;
+            color: #0f172a;
+            margin: 0;
+            padding: 8px;
+        }
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        h2 {
+            font-size: 1.1rem;
+            color: #0284c7;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 4px;
+        }
+        p.subtitle {
+            font-size: 0.78rem;
+            color: #64748b;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            font-size: 0.95rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+            background: #f8fafc;
+            outline: none;
+        }
+        .search-box:focus {
+            border-color: #0284c7;
+            background: #fff;
+        }
+        .collab-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+        }
+        .collab-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .input-nome {
+            flex: 1;
+            padding: 6px 8px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: #fff;
+            color: #0f172a;
+        }
+        .btn-salvar {
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+        .btn-salvar:active {
+            transform: scale(0.95);
+        }
+        .collab-inputs {
+            display: flex;
+            gap: 6px;
+        }
+        .input-campo {
+            flex: 1;
+            padding: 6px;
+            font-size: 0.8rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            text-align: center;
+            background: #fff;
+            box-sizing: border-box;
+        }
+        .input-campo:focus, .input-nome:focus {
+            border-color: #0284c7;
+            outline: none;
+            background-color: #f0fdf4;
+        }
+        .label-mini {
+            font-size: 0.65rem;
+            color: #64748b;
+            display: block;
+            margin-bottom: 2px;
+            font-weight: bold;
+        }
+        .campo-grupo {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Atualização Cadastral - Secagem</h2>
+    <p class="subtitle">Edite seu nome, matrícula ou Workday e clique no disquete (💾) para salvar.</p>
+
+    <input type="text" id="filtroNome" class="search-box" placeholder="🔍 Digite seu nome para encontrar rápido..." oninput="renderizarLista()">
+
+    <div id="listaContainer">
+        <!-- Preenchido via JavaScript -->
+    </div>
+</div>
+
+<script>
+    // Lista completa de colaboradores
+    const listaInicial = [
+        { nome: "ADRIANO JOSÉ CARPANEZI", matricula: "37003305", workday: "" },
+        { nome: "ALAN AUGUSTO SANT ANA ANCONI", matricula: "37003739", workday: "" },
+        { nome: "ALESSANDRO CONEGLIAN SAIS", matricula: "37003216", workday: "" },
+        { nome: "ALEX DE ALMEIDA DOS SANTOS", matricula: "37003740", workday: "" },
+        { nome: "ANTONIO FLORISMUNDO MACATUBA", matricula: "37000150", workday: "" },
+        { nome: "CARLOS ROBERTO LUCIANO GOES", matricula: "37000183", workday: "" },
+        { nome: "CASSIANO RICARDO MACIEL", matricula: "37000408", workday: "" },
+        { nome: "CESAR DIEGO EVANGELISTA DE OLIVEIRA", matricula: "37003325", workday: "" },
+        { nome: "CLAUDIONOR RODRIGUES DE OLIVEIRA", matricula: "37000211", workday: "" },
+        { nome: "CLEBER APARECIDO DE SOUZA", matricula: "37003756", workday: "" },
+        { nome: "DANIEL JOSÉ DA SILVA PELEGRIN", matricula: "37022537", workday: "" },
+        { nome: "DESIO APARECIDO PIRAS NETO", matricula: "37003758", workday: "" },
+        { nome: "EDER SILAS FERREIRA CASTANHEIRO", matricula: "37019731", workday: "" },
+        { nome: "EDSON SOARES DA SILVA", matricula: "37000209", workday: "" },
+        { nome: "ELISANGELA FELICIO", matricula: "37000182", workday: "" },
+        { nome: "ELIZEU JOSÉ DA SILVA", matricula: "", workday: "" },
+        { nome: "EMERSON LUIZ BORIN", matricula: "37000220", workday: "" },
+        { nome: "FÁBIO APARECIDO PEREIRA", matricula: "37000341", workday: "20009048" },
+        { nome: "FERNANDA GUIARE VAREJANO", matricula: "37003337", workday: "" },
+        { nome: "GUILHERME LUIZ DO CARMO", matricula: "37020306", workday: "" },
+        { nome: "JACKSON MAURICIO GOMES BALIEIRO", matricula: "37017067", workday: "" },
+        { nome: "JEFFERSON MATIAS DE OLIVEIRA", matricula: "37018406", workday: "" },
+        { nome: "KAUAN ALVES NEVES", matricula: "38002099", workday: "" },
+        { nome: "LUIS CARLOS POLYDORO", matricula: "37001043", workday: "" },
+        { nome: "LUIZ ANTONIO MESSIAS FADONI", matricula: "37003384", workday: "" },
+        { nome: "LUIZ CARLOS PIMENTEL", matricula: "", workday: "" },
+        { nome: "MARCELO HENRIQUE DE OLIVEIRA", matricula: "37006387", workday: "" },
+        { nome: "MARCO ANTONIO TAVANO", matricula: "37000692", workday: "" },
+        { nome: "MARCO AURÉLIO POSSONI", matricula: "37000305", workday: "" },
+        { nome: "MARCOS ANTONIO IDALGO", matricula: "37000214", workday: "" },
+        { nome: "MARCOS TADEU MEALLA DE SOUZA", matricula: "37011459", workday: "" },
+        { nome: "MIGUEL DE SOUZA AIAS", matricula: "37018872", workday: "" },
+        { nome: "OSWALDO LUIS DA SILVA", matricula: "37001172", workday: "" },
+        { nome: "PAULO MARTINS DE ALMEIDA", matricula: "37000148", workday: "" },
+        { nome: "RAFAELA SASKYA PARLLA JANSAN", matricula: "37019048", workday: "" },
+        { nome: "RAFAELA MENEZES MARREIRO", matricula: "37010786", workday: "" },
+        { nome: "REGIANE DOS SANTOS BATISTA", matricula: "37022538", workday: "" },
+        { nome: "RODOLFO RODRIGO DE ARAUJO", matricula: "37003400", workday: "" },
+        { nome: "RODRIGO VIEIRA RIBEIRO", matricula: "37003230", workday: "" },
+        { nome: "VAGNER DOS SANTOS", matricula: "37000338", workday: "" },
+        { nome: "VALDECI JOSÉ ROSSINI", matricula: "37000215", workday: "" }
+    ];
+
+    // Carrega dados salvos ou usa a lista padrão
+    let dadosColaboradores = JSON.parse(localStorage.getItem('colab_cadastros_v3')) || listaInicial;
+
+    function renderizarLista() {
+        const container = document.getElementById('listaContainer');
+        const filtro = document.getElementById('filtroNome').value.toLowerCase();
+        container.innerHTML = '';
+
+        dadosColaboradores.forEach((colab, index) => {
+            if (filtro && !colab.nome.toLowerCase().includes(filtro)) {
+                return;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'collab-card';
+            card.innerHTML = `
+                <div class="collab-header">
+                    <input type="text" class="input-nome" id="nome_${index}" value="${colab.nome}" placeholder="Nome do Colaborador">
+                    <button class="btn-salvar" onclick="salvarLinha(${index})">💾 Salvar</button>
+                </div>
+                <div class="collab-inputs">
+                    <div class="campo-grupo">
+                        <span class="label-mini">Matrícula</span>
+                        <input type="text" class="input-campo" id="mat_${index}" value="${colab.matricula}" placeholder="Matrícula">
+                    </div>
+                    <div class="campo-grupo">
+                        <span class="label-mini">Workday</span>
+                        <input type="text" class="input-campo" id="work_${index}" value="${colab.workday}" placeholder="Workday">
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function salvarLinha(index) {
+        const inputNome = document.getElementById(`nome_${index}`);
+        const inputMat = document.getElementById(`mat_${index}`);
+        const inputWork = document.getElementById(`work_${index}`);
+
+        if (inputNome && inputMat && inputWork) {
+            dadosColaboradores[index].nome = inputNome.value.trim().toUpperCase();
+            dadosColaboradores[index].matricula = inputMat.value.trim();
+            dadosColaboradores[index].workday = inputWork.value.trim();
+
+            localStorage.setItem('colab_cadastros_v3', JSON.stringify(dadosColaboradores));
+            alert(`Registro de ${dadosColaboradores[index].nome} salvo com sucesso!`);
+        }
+    }
+
+    renderizarLista();
+</script>
+
+</body>
+</html>
